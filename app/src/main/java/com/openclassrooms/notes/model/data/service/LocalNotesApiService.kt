@@ -9,8 +9,9 @@ import com.openclassrooms.notes.model.data.Note
  */
 class LocalNotesApiService : NotesApiService {
 
-    override fun addNote(note: List<Note>) {
-        TODO("Not yet implemented")
+    override fun addNote(note: Note) {
+        val listOfNotes = mutableListOf<Note>()
+        listOfNotes.add(note)
     }
 
     @SuppressLint("SuspiciousIndentation")

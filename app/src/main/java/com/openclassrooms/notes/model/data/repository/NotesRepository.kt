@@ -25,6 +25,5 @@ class NotesRepository(notesApiService: NotesApiService = LocalNotesApiService())
 
     fun addNote(note: Note) {
         _notes.value = listOf(note) + _notes.value
-        Log.d("RepoNote", "addNote: $notes")
     }
 }

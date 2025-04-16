@@ -11,7 +11,7 @@ interface NotesApiService {
      * Add a note
      * @param note The note to add
      */
-    fun addNote(note: List<Note>)
+    fun addNote(note: Note)
 
     /**
      * Returns all the notes
