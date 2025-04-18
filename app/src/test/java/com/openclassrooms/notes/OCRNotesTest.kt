@@ -46,4 +46,15 @@ class OCRNotesTest {
         assertEquals("title", note.title)
         assertEquals("body", note.body)
     }
+
+    @Test
+    fun testGetAllNotes() {
+        val notesApiService = LocalNotesApiService()
+        val firstNote = notesApiService.getAllNotes()[0]
+
+        assertEquals("La vie est belle", firstNote.title)
+        assertEquals("La vie est belle, pleine de choses à voir et à faire." +
+                " Profitez de chaque moment et ne laissez jamais personne vous dire" +
+                " que vous ne pouvez pas faire ce que vous voulez.", firstNote.body)
+    }
 }

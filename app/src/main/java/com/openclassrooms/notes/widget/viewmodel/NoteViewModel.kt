@@ -10,32 +10,41 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import com.openclassrooms.notes.widget.NotesAdapter
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class NoteViewModel(private val notesRepository: NotesRepository) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<List<Note>>(emptyList())
-    val uiState: StateFlow<List<Note>> = _uiState.asStateFlow()
-    init {collectNotes()}
+    private val _uiState = MutableStateFlow(NoteUISTate())
+    val uiState: StateFlow<NoteUISTate> = _uiState.asStateFlow()
 
-        fun addNote(note: Note) {
-            viewModelScope.launch {
-                notesRepository.addNote(note)
-            }
-        }
+    init {
+        collectNotes()
+    }
 
-        /**
-         * Collects notes from the repository and updates the adapter.
-         */
-        private fun collectNotes() = viewModelScope.launch {
-            notesRepository.notes.collect { notesList ->
-                _uiState.value = notesList
-            }
-        }
-
-        override fun onCleared() {
-            super.onCleared()
-            // Cancel all active coroutines, including StateFlow    observations
-            viewModelScope.cancel()
+    fun addNote(note: Note) {
+        viewModelScope.launch {
+            notesRepository.addNote(note)
         }
     }
+
+    /**
+     * Collects notes from the repository and updates the adapter.
+     */
+    private fun collectNotes() = viewModelScope.launch {
+        notesRepository.notes.onEach { noteUpdate ->
+            _uiState.update { currentNote ->
+                currentNote.copy(
+                    listNotes = noteUpdate
+                )
+            }
+        }
+            .launchIn(viewModelScope)
+    }
+
+    data class NoteUISTate(
+        val listNotes: List<Note> = emptyList()
+    )
+}

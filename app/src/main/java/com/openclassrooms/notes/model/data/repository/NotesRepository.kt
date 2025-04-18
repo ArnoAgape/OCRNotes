@@ -21,7 +21,7 @@ class NotesRepository(notesApiService: NotesApiService = LocalNotesApiService())
      * A flow that emits a list of all notes.
      */
     private val _notes = MutableStateFlow(notesApiService.getAllNotes())
-    val notes: StateFlow<List<Note>> = _notes.asStateFlow()
+    val notes: Flow<List<Note>> = _notes.asStateFlow()
 
     fun addNote(note: Note) {
         _notes.value = listOf(note) + _notes.value
