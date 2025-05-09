@@ -19,6 +19,7 @@ class NotesAdapter(private var notes: List<Note>) : RecyclerView.Adapter<NoteVie
      */
 
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateNotes(newNotes: List<Note>) {
         notes = newNotes
         notifyDataSetChanged()
